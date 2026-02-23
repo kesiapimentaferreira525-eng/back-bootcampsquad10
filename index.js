@@ -1,6 +1,24 @@
 import express, { request, response } from "express"
 import prisma from "./PrismaClient.js";
 
+
+import 'dotenv/config' // 1. Isso deve ser a PRIMEIRA LINHA do arquivo
+import { createClient } from '@supabase/supabase-js'
+
+// 2. Agora o Node vai conseguir ler as variáveis do seu .env
+const supabase = createClient(
+  process.env.SUPABASE_URL, 
+  process.env.SUPABASE_ANON_KEY
+)
+
+
+
+
+
+
+
+
+
 const app = express();
 app.use(express.json());
 
@@ -42,17 +60,41 @@ app.get("/users-posts", async (request, response) => {
 })
 
 
-app.post("/users", async (request, response) => {
-    const { name, email, phone } = request.body;
-    try {
-            const user = await prisma.user.create({
-            data: {  name,  email, phone }
-        })
-        return response.status(201).json(user);
-    } catch(error) {
-        return response.status(500).send();
-    }
+
+
+app.post('/signup', async (req, res) => {
+  const { email, password, name, phone, description } = req.body
+
+  try {
+    // 1. Cadastra no Supabase Auth (Gera o JWT e o ID de autenticação)
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+
+    if (authError) throw authError
+
+    // 2. Salva no seu banco usando o Prisma
+    const newUser = await prisma.user.create({
+      data: {
+        id: authData.user.id, // O ID vem do Supabase Auth
+        email,
+        name,
+        phone,
+        description
+      }
+    })
+
+    res.status(201).json({ message: "Usuário criado!", user: newUser })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
 })
+
+
+
+
+
 
 app.put("/users/:id", async (request, response) => {
     const { name, email, phone } = request.body;

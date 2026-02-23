@@ -11,6 +11,7 @@ model User {
   name   String   @db.VarChar(100)
   email  String   @unique
   phone  String
+  description String? 
   posts  Post[]
 
   @@map("users")
