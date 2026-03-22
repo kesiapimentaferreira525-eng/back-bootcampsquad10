@@ -1,10 +1,10 @@
-# 🚀 Projeto do Curso DFS-2026.1
+# Projeto do Curso DFS-2026.1
 
-Este é um projeto de **backend** desenvolvido com **Node.js + Express + Prisma ORM + PostgreSQL 15**, com o objetivo de gerenciar **ofertas de conhecimentos**.
+Este projeto consiste em um backend desenvolvido com Node.js e Express, focado na gestão de 'ofertas de conhecimentos'. A aplicação utiliza o Prisma ORM integrado ao PostgreSQL 15, integridade de dados e uma estrutura de banco de dados.
 
 ---
 
-## 📌 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Node.js**
 - **Express**
